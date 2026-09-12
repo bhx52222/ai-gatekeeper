@@ -1,0 +1,24 @@
+# 环境与凭据 —— 永不入库
+.env
+node_modules/
+dist/
+*.log
+assets/icon.iconset/
+*.pem
+*.key
+
+# 浏览器登录态 / cookie —— 永不入库
+*edge-profile*/
+*chrome-profile*/
+*cookie*
+browser-state/
+
+# 检测输出与日志
+*.log
+ai-ip-purity-*.json
+res/output.json
+
+# 系统与缓存
+.DS_Store
+__pycache__/
+*.pyc

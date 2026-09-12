@@ -1,0 +1,73 @@
+{
+  "name": "ai-environment-gatekeeper",
+  "version": "1.2.0",
+  "description": "Claude/OpenAI environment gatekeeper for macOS and Windows",
+  "main": "app/main.js",
+  "author": "bhx52222",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "dist:mac": "electron-builder --mac dmg zip --arm64 --publish never",
+    "dist:win": "electron-builder --win nsis portable --x64 --publish never",
+    "dist": "electron-builder --mac dmg zip --win nsis portable --publish never",
+    "checksums": "node build/generate_checksums.js dist"
+  },
+  "devDependencies": {
+    "electron": "^44.3.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.bhx52222.aigatekeeper",
+    "productName": "AI 环境门禁",
+    "asar": true,
+    "files": [
+      "app/**/*",
+      "scripts/**/*",
+      "saferoom/**/*",
+      "README.md"
+    ],
+    "extraResources": [
+      {
+        "from": "app/backend",
+        "to": "backend"
+      },
+      {
+        "from": "scripts",
+        "to": "gatekeeper-scripts"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "artifactName": "AI-Gatekeeper-${version}-macOS-${arch}.${ext}",
+      "icon": "assets/icon.icns",
+      "identity": null,
+      "hardenedRuntime": false
+    },
+    "dmg": {
+      "title": "AI 环境门禁 ${version}"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "artifactName": "AI-Gatekeeper-${version}-Windows-${arch}-Setup.${ext}",
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AI 环境门禁"
+    },
+    "portable": {
+      "artifactName": "AI-Gatekeeper-${version}-Windows-${arch}-Portable.${ext}"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

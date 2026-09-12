@@ -1,0 +1,41 @@
+services:
+  claude-code:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-local/claude-code-docker:latest}
+        CLAUDE_CODE_VERSION: ${CLAUDE_CODE_VERSION:-latest}
+    image: local/claude-code-saferoom:latest
+    container_name: claude-code-saferoom
+    tty: true
+    stdin_open: true
+    working_dir: /workspace
+    environment:
+      TZ: ${DOCKER_TZ:-America/Los_Angeles}
+      LANG: ${DOCKER_LANG:-en_US.UTF-8}
+      LANGUAGE: ${DOCKER_LANGUAGE:-en_US:en}
+      LC_ALL: ${DOCKER_LC_ALL:-en_US.UTF-8}
+      HTTP_PROXY: ${DOCKER_HTTP_PROXY:-${HTTP_PROXY:-}}
+      HTTPS_PROXY: ${DOCKER_HTTPS_PROXY:-${HTTPS_PROXY:-}}
+      ALL_PROXY: ${DOCKER_ALL_PROXY:-${ALL_PROXY:-}}
+      NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1,::1,host.docker.internal}
+      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+      DISABLE_AUTOUPDATER: "1"
+      CLAUDE_CONFIG_DIR: /home/node/.claude
+      TARGET_COUNTRY: ${TARGET_COUNTRY:-US}
+      EXPECTED_IP: ${EXPECTED_IP:-}
+      MIN_SCORE: ${MIN_SCORE:-85}
+      TIMEOUT: ${TIMEOUT:-20}
+    dns:
+      - ${DOCKER_DNS_1:-1.1.1.1}
+      - ${DOCKER_DNS_2:-8.8.8.8}
+    volumes:
+      - ${WORKSPACE_DIR:-./workspace}:/workspace
+      - claude-code-home:/home/node/.claude
+      - claude-code-zsh:/home/node/.zsh_history_store
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  claude-code-home:
+  claude-code-zsh:
